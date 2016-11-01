@@ -66,7 +66,7 @@ int main()
     char *argv[64];
     cin.getline(input, 1024);
     parse(input, argv);
-     
+    cout << "testing github" << endl;
     for (int i = 0; argv[i] != NULL; i++)
     {
         cout << argv[i] << endl;
