@@ -75,7 +75,7 @@ void parse(string letter, char **argv, vector<char> &con)
     
     // Parse the Parse ( Vector<string> cmd into Char * Array into Vector of the Char * Array )
     
-    vector<char**> vec_cmd;
+    vector<char**> vec_cmd;                     // Destination. Vector filled with argv
     bool cmd_flag = false;                      // While loop flag
     for (int k = 0; k < cmd.size(); k++)
     {
@@ -93,12 +93,12 @@ void parse(string letter, char **argv, vector<char> &con)
                 }
                 else
                 {
-                    //temp_hold += '\0';                      // Add Null Character
+                    temp_hold += '\0';                      // Add Null Character
                     temp.push_back(temp_hold);
                     temp_hold = '\0';
                 }
             }
-            //temp_hold += '\0';                              // Add Null Character on last string
+            temp_hold += '\0';                              // Add Null Character on last string
             temp.push_back(temp_hold);                        // Add last string
             temp.push_back('\0');                             // Have the last index be '\0'
             //temp_hold = '\0';
@@ -106,9 +106,11 @@ void parse(string letter, char **argv, vector<char> &con)
             cmd_flag = true;
         }
         
+        argv = new char * [temp.size()];
+        
          for (int i = 0; i < temp.size(); i++)
          {
-             argv = new char * [temp.size()];
+             
              char *holder = temp.at(i);
              int count = 0;
              while (holder[count] != '\0')
@@ -127,73 +129,69 @@ void parse(string letter, char **argv, vector<char> &con)
      {
          cout << vec_cmd[i] << endl;
      }
+     
 }
 
 
-void execute(char *argv[], vector<char> &con)
-{
-    int i = 0;
-    while (true)
-    {
-        pid_t pid;
-        int status;
-        if ((pid = fork()) < 0)
-        {
-            perror("ERROR: ");
-            if(con[i] == '|' || con[i] == ';')
-            {
-                i++;
-                continue;
-            }
-            else
-            {
-                exit(1);
-            }
-        }
-        else if (pid == 0)
-        {
-            if (execvp(*argv, argv) < 0)
-            {
-                perror("ERROR: ");
-                if(con[i] == '|' || con[i] == ';')
-                {
-                    i++;
-                    continue;
-                }
-                else
-                {
-                    exit(1);
-                }
-            }
-        }
-        else
-        {
-            while(wait(&status) != pid);
-        }
+// void execute(vector<string>&cmd, char con)
+// {
+//     int i = 0;
+//     while (true)
+//     {
+//         pid_t pid;
+//         int status;
+//         if ((pid = fork()) < 0)
+//         {
+//             perror("ERROR: ");
+//             if(con == '|' || con == ';')
+//             {
+//                 i++;
+//                 continue;
+//             }
+//             else
+//             {
+//                 exit(1);
+//             }
+//         }
+//         else if (pid == 0)
+//         {
+//             if (execvp(*argv, argv) < 0)
+//             {
+//                 perror("ERROR: ");
+//                 if(con == '|' || con == ';')
+//                 {
+//                     i++;
+//                     continue;
+//                 }
+//                 else
+//                 {
+//                     exit(1);
+//                 }
+//             }
+//         }
+//         else
+//         {
+//             while(wait(&status) != pid);
+//         }
         
         
-    }
-}
-
-struct command
-{
-    char *c[64];
-};
+//     }
+// }
 
 int main()
 {
     vector<char> con;
-    vector<command>cmd;
+    vector<string>cmd;
     cout << "This is our command shell." << endl;
     cout << "$ ";
     char input[1024];
     //string input;
     char *argv[64];
     cin.getline(input, 1024);
-   // getline(cin, input);
+    //getline(cin, input);
     //parse(input, argv, con);
-    //string test = "ls -a";
     
+    //string test = "ls -a";
     //test(test);
     
     //cout << "testing github" << endl;
@@ -201,10 +199,13 @@ int main()
     //{
     //    cout << argv[i] << endl;
     //}
+    
+    
       int i = 0;
       char *token = strtok(input, " ");
       char *temp;
-      bool vflag = false;
+      bool vflag = false;         
+      string s;
      while (token != NULL)
      {
          argv[i] = token;
@@ -216,34 +217,57 @@ int main()
                  vflag = true;
                  con.push_back(temp[j]);
                  temp[j] = '\0';
+                 //s.append(temp);
+                 
              }
-             if(temp[j] == '&' || temp[j] == '|')
+             else if(temp[j] == '&' || temp[j] == '|')
              {
                  vflag = true;
                  con.push_back(temp[j]);
                  temp[j] = temp[j+1] = '\0';
                  j++;
              }
+             else
+             {
+                 //s.append(temp);
+             }
          }
          //cout << token << endl;
           argv[i] = temp;
-          if (vflag)
-          {
-              
-            //   command co;
-            //   int ccount = 0;
-            //   while(argv[i] != '\0')
-            //   {
-            //       co.c[ccount] = argv[i]; 
-            //       ccount++;
-            //   }
-             
-            //   cmd.push_back(co);
-             
+            //cout << argv[i] << endl;
+              if (vflag)
+              {
+                 // string s(argv[i]);
+                 cout << s << endl;
+                  //cmd.push_back(s);
+                  s.clear();
+                  cmd.clear();
+                //   command co;
+                //   int ccount = 0;
+                //   while(argv[i] != '\0')
+                //   {
+                //       co.c[ccount] = argv[i]; 
+                //       ccount++;
+                //   }
+                 
+                //   cmd.push_back(co);
+                 
+              }
+              else
+              {
+                  cmd.push_back(s);
+                  //s.append(argv[i]);
+                  cout << s << endl;
+              }
           }
           token = strtok(NULL, " ");
           i++;
         vflag = false;
-     }
+      
+     
+     //for(int i = 0; i < cmd.size(); i++)
+     //{
+     //    cout << cmd.at(i) << endl;
+     //}
     return 0;
 }
