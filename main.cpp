@@ -107,14 +107,14 @@ void parse(string letter, vector<char**> &vec_cmd, vector<char> &con)
 				}
 				else
 				{
-					temp_hold[index + 1] = '\0';                        // Add Null Character
+					temp_hold[index] = '\0';                        // Add Null Character
 					temp.push_back(temp_hold);                      // Push the array onto the vector
 					temp_hold = new char[hold.length()];            // Reset the array
 					index = 0;
 				}
 			}
 			
-			temp_hold[index + 1]= '\0';                             // Add Null Character on last string
+			temp_hold[index]= '\0';                             // Add Null Character on last string
 			temp.push_back(temp_hold);                          // Add last string
 			temp.push_back('\0');                               // Have the last index be '\0'
 			temp_hold = new char[hold.length()];
@@ -134,8 +134,10 @@ void parse(string letter, vector<char**> &vec_cmd, vector<char> &con)
   		// 	cout << temp.at(k) << endl;
   		// }
   		
-		char** argv = new char *[temp.size()];
+		char** argv;
+		argv = new char *[temp.size()];
 		char *copy; 
+		int count;
 		
 		cout << endl << temp.size() << endl;
 		
@@ -146,7 +148,7 @@ void parse(string letter, vector<char**> &vec_cmd, vector<char> &con)
  		    
  		    // cout << i << " ";
  		    copy = temp.at(m);
- 		    int count = strlen(copy);
+ 		    count = strlen(copy);
  			argv[m] = new char [count];
  			strcpy ( argv[m], copy );
  		}
@@ -154,12 +156,14 @@ void parse(string letter, vector<char**> &vec_cmd, vector<char> &con)
  		cout << endl;
  		
  		// char * null = '\0';														// Add Null to the last index of Char**
- 		// strcpy ( argv[temp.size()], null );
+ 		// strcpy ( argv[temp.size()], temp.at(temp.size()) );
   		vec_cmd.push_back(argv);
   		cout << endl << "Pushed into vec_cmd" << endl;
   		cmd_flag = false;
  	}
 
+
+	// // TEST PRINTS
  //   cout << endl << "vec_cmd Data:" << endl;
 	// for (int w = 0; w < vec_cmd.size(); w++)
 	// {
@@ -167,9 +171,21 @@ void parse(string letter, vector<char**> &vec_cmd, vector<char> &con)
 	// 	cout << "Command Line #" << (w + 1) << endl;
 	// 	for(int d = 0; test[d] != '\0' ; d++)
 	// 	{
-	// 		cout << test[d] << endl;
+	// 		cout << d;
+	// 		// cout << test[d] << endl;
 	// 	}
+	// 	cout << endl;
 	// }
+	
+	// char ** test_t = vec_cmd.at(1);
+	
+	// for (int s = 0; test_t[s] != '\0'; s++)
+	// {
+	// 	cout << s << endl;
+	// 	cout << test_t[s] << endl;
+	// }
+	
+	// cout << "\nEnd";
 	
 
 	    // string s(input);
@@ -263,10 +279,6 @@ void parse(string letter, vector<char**> &vec_cmd, vector<char> &con)
 		// strcpy(temp, s.c_str());
 		// strcpy(temp2, s2.c_str());
 		argv = cmd[cmd_index];
-		for (int i = 0; argv[i] != '\0'; i++)
-		{
-			cout << argv[i] << endl;
-		}
 		pid_t pid;
         int status;
         if ((pid = fork()) < 0)
