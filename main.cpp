@@ -9,8 +9,8 @@
 
 using namespace std;
 
-// void parse(string letter, vector<char**> &vec_cmd, vector<char> &con)
-// {
+ void parse(char input[], vector<string> &cmd, vector<char> &con)
+ {
 // 	vector<string> cmd;
 // 	bool end_flag = false;
 // 	bool letter_flag = false;
@@ -138,160 +138,200 @@ using namespace std;
 // 	{
 // 	    cout << vec_cmd.at(i) << endl;
 // 	}
+	    string s(input);
+	      int i = 0;
+	      char *token = strtok(input, ";|&");
+	      while (token != NULL)
+	      {	 
+	      	cmd.push_back(token);
+	          token = strtok(NULL, ";|&");
+	          i++;
+	          }
+	          for (int i = 0; i < s.size(); i++)
+	          {
+	          	if (s[i] == ';')
+	          	{
+	          		con.push_back(s[i]);
+	          	}
+	          	if (s[i] == '&')
+	          	{
+	          		con.push_back(s[i]);
+	          	}
+	          	if (s[i] == '|')
+	          	{
+	          		con.push_back(s[i]);
+	          	}
+	          	if(s[i] == '#')
+	          	{
+	          		con.push_back(s[i]);
+	          		break;
+	          	}
+	          }
+	      	
+ }
 
-// }
 
-
- int execute(vector<string>&cmd)
+ void execute(vector<string>&cmd, vector<char>&con)
  {
+// 	char *argv[cmd.size()];
+// 	char *temp;
+// 	char con;
+// 	// cout << cmd.size() << endl;
+// 	int count = 0;
+// 	while(count < cmd.size() || cmd.at(count) != "#")
+// 	{
+// 	for(int i = 0; i < cmd.size(); i++)
+// 	{
+// 		if(cmd.at(i) == ";" || cmd.at(i) == "&"  || cmd.at(i) == "|" || cmd.at(i) == "#")
+// 		{
+// 			con = cmd.at(i)[0];
+// 			break;
+// 		}
+// 		else
+// 		{
+// 			string s = cmd.at(i);
+// 			strcpy(temp, s.c_str());
+// 			argv[i] = temp;			
+// 		}
+
+// //		cout << argv[i] << endl;
+// 	}
+// 	argv[cmd.size() + 1] = '\0';
+	int cmd_index = 0;
+	int con_index = 0;
 	char *argv[cmd.size()];
-	char *temp;
-	char con;
-	// cout << cmd.size() << endl;
-	int count = 0;
-	while(count < cmd.size() || cmd.at(count) != "#")
+	for (cmd_index = 0; cmd_index < cmd.size(); cmd_index++)
 	{
-	for(int i = 0; i < cmd.size(); i++)
-	{
-		if(cmd.at(i) == ";" || cmd.at(i) == "&"  || cmd.at(i) == "|" || cmd.at(i) == "#")
+		
+		string s = cmd.at(cmd_index);
+		char *temp = new char[s.length() + 1];
+		strcpy(temp, s.c_str());
+		char *token = strtok(temp, " ");
+		argv[cmd_index] = token;
+		while (token != NULL)
 		{
-			con = cmd.at(i)[0];
-			break;
+			argv[cmd_index] = token;
+			cout << argv[cmd_index] << endl;
+			token = strtok(NULL, " ");
 		}
-		else
-		{
-			string s = cmd.at(i);
-			strcpy(temp, s.c_str());
-			argv[i] = temp;			
-		}
-
-//		cout << argv[i] << endl;
+		delete [] temp;		
 	}
-	argv[cmd.size() + 1] = '\0';
 
-        pid_t pid;
-        int status;
-        if ((pid = fork()) < 0)
-        {
-            perror("ERROR");
-            if(con == '|' || con == ';')
-            {
-               // i++;
-                return -1;
-            }
-            else
-            {
-                exit(1);
-            }
-        }
-        else if (pid == 0)
-        {
-            if (execvp(argv[0], argv) < 0)
-            {
-                perror("ERROR");
-                if(con == '|' || con == ';')
-                {
-                  //  i++;
-                    return -1;
-                }
-                else
-                {
-                    exit(1);
-                }
-            }
-        }
-        else
-        {
-            while(wait(&status) != pid);
-        }
-        count++;
-	}
+        // pid_t pid;
+        // int status;
+        // if ((pid = fork()) < 0)
+        // {
+        //     perror("ERROR");
+        //     if(con == '|' || con == ';')
+        //     {
+        //       // i++;
+        //         return -1;
+        //     }
+        //     else
+        //     {
+        //         exit(1);
+        //     }
+        // }
+        // else if (pid == 0)
+        // {
+        //     if (execvp(argv[0], argv) < 0)
+        //     {
+        //         perror("ERROR");
+        //         if(con == '|' || con == ';')
+        //         {
+        //           //  i++;
+        //             return -1;
+        //         }
+        //         else
+        //         {
+        //             exit(1);
+        //         }
+        //     }
+        // }
+        // else
+        // {
+        //     while(wait(&status) != pid);
+        // }
+       // count++;
+	//}
 }
 
 int main()
 {
-    vector<char> con;
+    vector<char>con;
     vector<string>cmd;
     cout << "This is our command shell." << endl;
-    while (true)
-    {
 	    cout << "$ ";
 	    char input[1024];
 	    //string input;
 	    char *argv[64];
 	    cin.getline(input, 1024);
 	    //getline(cin, input);
-	    //parse(input, vec_cmd, con);
-	    
-	    if(strcmp(input, "exit") == 0)
+	    parse(input, cmd, con);
+	    if (strcmp(input, "exit") == 0)
 	    {
 	    	exit(0);
 	    }
-	    
-	      int i = 0;
-	      char *token = strtok(input, " ");
-	      char *temp;
-	      bool vflag;         
-	      string s;
-	     while (token != NULL)
-	     {
-	     	vflag = false;
-	         argv[i] = token;
-	         temp = argv[i];
-	         for (int j = 0; temp[j] != '\0'; j++)
-	         {
-	             if(temp[j] == ';')
-	             {
-	                 vflag = true;
+	execute(cmd,con);    
+
+	      //char *temp;
+	      //bool vflag;         
+	      //string s;
+
+	     	// vflag = false;
+	      //   argv[i] = token;
+	      //   temp = argv[i];
+	      //   for (int j = 0; temp[j] != '\0'; j++)
+	      //   {
+	      //       if(temp[j] == ';')
+	      //       {
+	      //           vflag = true;
 	                
-	                 string r(temp);
-	                 r.pop_back();
-	                 strcpy(temp,r.c_str());
-	                  cmd.push_back(temp);
-	             }
-	             else if(temp[j] == '&' || temp[j] == '|')
-	             {
-	                 vflag = true;
+	      //           string r(temp);
+	      //           r.pop_back();
+	      //           strcpy(temp,r.c_str());
+	      //            cmd.push_back(temp);
+	      //       }
+	      //       else if(temp[j] == '&' || temp[j] == '|')
+	      //       {
+	      //           vflag = true;
 	               
-	                 string r(temp);
-	                r.pop_back();
-	                r.pop_back();
-	                strcpy(temp,r.c_str());
-	                  cmd.push_back(temp);
-	                 j++;
-	             }
-	             else if(temp[j] == '#')
-	             {
-	             	vflag = true;
+	      //           string r(temp);
+	      //          r.pop_back();
+	      //          r.pop_back();
+	      //          strcpy(temp,r.c_str());
+	      //            cmd.push_back(temp);
+	      //           j++;
+	      //       }
+	      //       else if(temp[j] == '#')
+	      //       {
+	      //       	vflag = true;
 	       
-	             	string r(temp);
-	             	r.pop_back();
-	             	strcpy(temp,r.c_str());
-	             	cmd.push_back(temp);
-	             	break;
-	             }
-	             else
-	             {
-	             	argv[i] = temp;
-	             }
-	         }
-	                   string s(argv[i]);
-	                      cmd.push_back(s); 
-	              if (vflag)
-	              {
-	              int ex = execute(cmd);
-	                  cmd.clear();
-	                  if(ex == -1)
-	                  {
-	                  	if(con[i] == '|' || con[i] == ';')
-	                  	{
-	                  		continue;
-	                  	}
-	                  }
-	             }
-	          token = strtok(NULL, " ");
-	          i++;
-	          }
-    }
+	      //       	string r(temp);
+	      //       	r.pop_back();
+	      //       	strcpy(temp,r.c_str());
+	      //       	cmd.push_back(temp);
+	      //       	break;
+	      //       }
+	      //       else
+	      //       {
+	      //       	argv[i] = temp;
+	      //       }
+	      //   }
+	      //             string s(argv[i]);
+	      //                cmd.push_back(s); 
+	      //        if (vflag)
+	      //        {
+	      //        int ex = execute(cmd);
+	      //            cmd.clear();
+	      //            if(ex == -1)
+	      //            {
+	      //            	if(con[i] == '|' || con[i] == ';')
+	      //            	{
+	      //            		continue;
+	      //            	}
+	      //            }
+	      //       }
+	      
       return 0;
 }
