@@ -226,7 +226,7 @@ int main()
 	    {
 	    	exit(0);
 	    }
-	  	    parse(input, vec_cmd, con);  
+	  	parse(input, vec_cmd, con);  
 	}
       return 0;
 }
