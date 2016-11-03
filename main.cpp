@@ -9,169 +9,203 @@
 
 using namespace std;
 
- void parse(char input[], vector<string> &cmd, vector<char> &con)
- {
-// 	vector<string> cmd;
-// 	bool end_flag = false;
-// 	bool letter_flag = false;
+void parse(string letter, vector<char**> &vec_cmd, vector<char> &con);
+ void execute(vector<char**>cmd, vector<char>con);
 
-// 	while (letter_flag == false)
-// 	{
-// 		string temp;
+void parse(string letter, vector<char**> &vec_cmd, vector<char> &con)
+{
+	vector<string> cmd;
+	bool end_flag = false;
+	bool letter_flag = false;
+	int i;
 
-// 		for (int i = 0; i < letter.length(); i++)
-// 		{
-// 			end_flag = false;                                   // If the end of the command has been reached
+	while (letter_flag == false)
+	{
+		string temp;
 
-// 			if (letter[i] == '#')                                // If start of a comment disregard rest of line
-// 			{
-// 				break;
-// 			}
-// 			if (letter[i] == ';')                                // If the char is ';' push into the connector stack
-// 			{
-// 				end_flag = true;
-// 				con.push_back(letter[i]);
-// 			}
-// 			else if (letter[i] == '&' || letter[i] == '|')       // If the char is '&' or '|' push into the connector stack 
-// 			{
-// 				end_flag = true;
-// 				con.push_back(letter[i]);
-// 				i++;                                            // Skip the duplicate '&' or '|'
-// 			}
-// 			if (end_flag == true)                                // If the current letter is a connector 
-// 			{
-// 				if (temp[0] == ' ')
-// 				{
-// 					temp.erase(0, 1);
-// 				}
-// 				cmd.push_back(temp);
-// 				temp = "";
-// 			}
-// 			else
-// 			{
-// 				temp += letter[i];
-// 			}
+		for (i = 0; i < letter.length(); i++)
+		{
+			end_flag = false;                                   // If the end of the command has been reached
 
-// 		}
-// 		if (temp[0] == ' ')                                      // Push back the last string that does not have a connector
-// 		{
-// 			temp.erase(0, 1);
-// 		}
-// 		cmd.push_back(temp);
-// 		letter_flag = true;
-// 	}
+			if (letter[i] == '#')                                // If start of a comment disregard rest of line
+			{
+				break;
+			}
+			if (letter[i] == ';')                                // If the char is ';' push into the connector stack
+			{
+				end_flag = true;
+				con.push_back(letter[i]);
+			}
+			else if (letter[i] == '&' || letter[i] == '|')       // If the char is '&' or '|' push into the connector stack 
+			{
+				end_flag = true;
+				con.push_back(letter[i]);
+				i++;                                            // Skip the duplicate '&' or '|'
+			}
+			if (end_flag == true)                                // If the current letter is a connector 
+			{
+				if (temp[0] == ' ')
+				{
+					temp.erase(0, 1);
+				}
+				cmd.push_back(temp);
+				temp = "";
+			}
+			else
+			{
+				temp += letter[i];
+			}
+			
+			end_flag = false;
 
-// 	//Print the vectors
-// 	// for(int j = 0; j < cmd.size(); j++)
-// 	// {
-// 	//     cout << cmd.at(j) << endl;
-// 	//     if(j < con.size())
-// 	//         cout << con.at(j) << endl;
-// 	//     else
-// 	//     {
-// 	//         // Nothing
-// 	//     }
-// 	// }
+		}
+		if (temp[0] == ' ')                                      // Push back the last string that does not have a connector
+		{
+			temp.erase(0, 1);
+		}
+		cmd.push_back(temp);
+		letter_flag = true;
+	}
 
-// 	// Parse the Parse ( Vector<string> cmd into Char * Array into Vector of the Char * Array )
+	//Print the vectors
+	// for(int j = 0; j < cmd.size(); j++)
+	// {
+	//     cout << cmd.at(j) << endl;
+	//     if(j < con.size())
+	//         cout << con.at(j) << endl;
+	//     else
+	//     {
+	//         // Nothing
+	//     }
+	// }
 
-// //	vector<char**> vec_cmd;                     // Destination. Vector filled with argv
-// 	bool cmd_flag = false;                      // While loop flag
+	// Parse the Parse ( Vector<string> cmd into Char * Array into Vector of the Char * Array )
+	bool cmd_flag = false;                      // While loop flag
 	
 	    
 	
-// 	for (int k = 0; k < cmd.size(); k++)
-// 	{
-// 		string hold = cmd.at(k);                // Temp holder for the first command
+	for (int k = 0; k < cmd.size(); k++)
+	{
+		cout << cmd.at(k) << endl;
+		string hold = cmd.at(k);                // Temp holder for the first command
 
-// 		vector<char*> temp;                     // Vector for the single command line
-		        
+		vector<char*> temp;                     // Vector for the single command line
 		
-// 		// LOOP - Parses the spaces in the single command line.
-// 		while (cmd_flag == false)
-// 		{
-// 		    char *temp_hold = new char[hold.length()];   
-// 			int index = 0;                                          // Index for temp_hold
+		// LOOP - Parses the spaces in the single command line.
+		while (cmd_flag == false)
+		{
+		    char *temp_hold = new char[hold.length()];
+			int index = 0;                                          // Index for temp_hold
 			
-// 			for (int i = 0; i < hold.length(); i++)
-// 			{
-// 				if (hold[i] != ' ')
-// 				{
+			for (int z = 0; z < hold.length(); z++)
+			{
+				if (hold[z] != ' ')
+				{
 					
-// 					temp_hold[index] = hold[i];
-// 					index++;
-// 				}
-// 				else
-// 				{
-// 					temp_hold[index] = '\0';                        // Add Null Character
-// 					temp.push_back(temp_hold);                      // Push the array onto the vector
-// 					temp_hold = new char[hold.length()];            // Reset the array
-// 					index = 0;
-// 				}
-// 			}
+					temp_hold[index] = hold[z];
+					index++;
+				}
+				else
+				{
+					temp_hold[index + 1] = '\0';                        // Add Null Character
+					temp.push_back(temp_hold);                      // Push the array onto the vector
+					temp_hold = new char[hold.length()];            // Reset the array
+					index = 0;
+				}
+			}
 			
-// 			temp_hold[index]= '\0';                              // Add Null Character on last string
-// 			temp.push_back(temp_hold);                          // Add last string
-// 			temp.push_back('\0');                               // Have the last index be '\0'
+			temp_hold[index + 1]= '\0';                             // Add Null Character on last string
+			temp.push_back(temp_hold);                          // Add last string
+			temp.push_back('\0');                               // Have the last index be '\0'
+			temp_hold = new char[hold.length()];
+			index = 0;
 
-// 			cmd_flag = true;
-// 		}
+			cmd_flag = true;                                    // Exit while loop
+		}
 		
-// 		// Then store the indexs into argv and push into a vector of argv
-//   		char** argv = new char *[temp.size()];
-
-//  		for (int i = 0; i < temp.size(); i++)
-//  		{
-//  		    // ------------------- ERROR HERE -------------------------------------
-//  		    // Segmentation Fault when the lines below are added
-//  			int count = (unsigned)strlen(temp.at(i));
-//  			argv[i] = new char [count];
-//  			strcpy( argv[i], temp.at(i) );
-//  		}
+		// for (int i = 0; i < temp.size(); i++)
+		// {
+		// 	cout << temp.at(i) << endl;
+		// }
+		// Then store the indexs into argv and push into a vector of argv
+  		
+  		// for(int k = 0; k < temp.size(); k++)
+  		// {
+  		// 	cout << temp.at(k) << endl;
+  		// }
+  		
+		char** argv = new char *[temp.size()];
+		char *copy; 
+		
+		cout << endl << temp.size() << endl;
+		
+ 		for (int m = 0; m < (temp.size() - 1); m++)
+ 		{
+ 		    // ------------------- ERROR HERE -------------------------------------
+ 		    // Segmentation Fault when the lines below are added
+ 		    
+ 		    // cout << i << " ";
+ 		    copy = temp.at(m);
+ 		    int count = strlen(copy);
+ 			argv[m] = new char [count];
+ 			strcpy ( argv[m], copy );
+ 		}
  		
-//   		vec_cmd.push_back(argv);
-//   		cmd_flag = false;
-//  	}
+ 		cout << endl;
+ 		
+ 		// char * null = '\0';														// Add Null to the last index of Char**
+ 		// strcpy ( argv[temp.size()], null );
+  		vec_cmd.push_back(argv);
+  		cout << endl << "Pushed into vec_cmd" << endl;
+  		cmd_flag = false;
+ 	}
 
-//     cout << endl << "vec_cmd Data:" << endl;
-// 	for (int i = 0; i < vec_cmd.size(); i++)
-// 	{
-// 	    cout << vec_cmd.at(i) << endl;
-// 	}
-	    string s(input);
-	      int i = 0;
-	      char *token = strtok(input, ";|&");
-	      while (token != NULL)
-	      {	 
-	      	cmd.push_back(token);
-	          token = strtok(NULL, ";|&");
-	          i++;
-	          }
-	          for (int i = 0; i < s.size(); i++)
-	          {
-	          	if (s[i] == ';')
-	          	{
-	          		con.push_back(s[i]);
-	          	}
-	          	if (s[i] == '&')
-	          	{
-	          		con.push_back(s[i]);
-	          	}
-	          	if (s[i] == '|')
-	          	{
-	          		con.push_back(s[i]);
-	          	}
-	          	if(s[i] == '#')
-	          	{
-	          		con.push_back(s[i]);
-	          		break;
-	          	}
-	          }
-	      	
+ //   cout << endl << "vec_cmd Data:" << endl;
+	// for (int w = 0; w < vec_cmd.size(); w++)
+	// {
+	// 	char ** test = vec_cmd.at(w);
+	// 	cout << "Command Line #" << (w + 1) << endl;
+	// 	for(int d = 0; test[d] != '\0' ; d++)
+	// 	{
+	// 		cout << test[d] << endl;
+	// 	}
+	// }
+	
+
+	    // string s(input);
+	    //   int i = 0;
+	    //   char *token = strtok(input, ";|&");
+	    //   while (token != NULL)
+	    //   {	 
+	    //   	cmd.push_back(token);
+	    //       token = strtok(NULL, ";|&");
+	    //       i++;
+	    //       }
+	    //       for (int i = 0; i < s.size(); i++)
+	    //       {
+	    //       	if (s[i] == ';')
+	    //       	{
+	    //       		con.push_back(s[i]);
+	    //       	}
+	    //       	if (s[i] == '&')
+	    //       	{
+	    //       		con.push_back(s[i]);
+	    //       	}
+	    //       	if (s[i] == '|')
+	    //       	{
+	    //       		con.push_back(s[i]);
+	    //       	}
+	    //       	if(s[i] == '#')
+	    //       	{
+	    //       		con.push_back(s[i]);
+	    //       		break;
+	    //       	}
+	    //       }
+	    execute(vec_cmd,con);  	
  }
 
 
- void execute(vector<string>&cmd, vector<char>&con)
+ void execute(vector<char**>cmd, vector<char>con)
  {
 // 	char *argv[cmd.size()];
 // 	char *temp;
@@ -199,59 +233,88 @@ using namespace std;
 // 	argv[cmd.size() + 1] = '\0';
 	int cmd_index = 0;
 	int con_index = 0;
-	char *argv[cmd.size()];
+
+	// vector<string>vcmd;
+	// for (cmd_index = 0; cmd_index < cmd.size(); cmd_index++)
+	// {
+		
+	// 	string s = cmd.at(cmd_index);
+	// 	char *temp = new char[s.length() + 1];
+	// 	strcpy(temp, s.c_str());
+	// 	char *temp = cmd.at(cmd_index);
+	// 	char *token = strtok(temp, " ");
+	// 	while (token != NULL)
+	// 	{
+	// 		string a(token);
+	// 		vcmd.push_back(a);
+	// 		token = strtok(NULL, " ");
+	// 	}
+	// 	delete [] temp;		
+	// }
 	for (cmd_index = 0; cmd_index < cmd.size(); cmd_index++)
 	{
-		
-		string s = cmd.at(cmd_index);
-		char *temp = new char[s.length() + 1];
-		strcpy(temp, s.c_str());
-		char *token = strtok(temp, " ");
-		argv[cmd_index] = token;
-		while (token != NULL)
+			char **argv = new char *[cmd.size()];
+		// string s = vcmd.at(cmd_index);
+		// cout << s << endl;
+		// string s2 = vcmd.at(cmd_index + 1);
+		// cout << s2 << endl;
+		// char *temp = new char[s.length() + 1];
+		// char *temp2 = new char[s2.length() + 1];
+		// strcpy(temp, s.c_str());
+		// strcpy(temp2, s2.c_str());
+		argv = cmd[cmd_index];
+		for (int i = 0; argv[i] != '\0'; i++)
 		{
-			argv[cmd_index] = token;
-			cout << argv[cmd_index] << endl;
-			token = strtok(NULL, " ");
+			cout << argv[i] << endl;
 		}
-		delete [] temp;		
+		pid_t pid;
+        int status;
+        if ((pid = fork()) < 0)
+        {
+            perror("ERROR");
+            if(con[con_index] == '|')
+            {
+              con_index + 2;
+                continue;
+            }
+            else if (con[con_index] == ';')
+            {
+            	con_index++;
+            	continue;
+            }
+            else
+            {
+                exit(1);
+            }
+        }
+        else if (pid == 0)
+        {
+            if (execvp(argv[0], argv) < 0)
+            {
+                perror("ERROR");
+                if(con[con_index] == '|')
+                {
+                  con_index + 2;
+                    continue;
+                }
+                else if (con[con_index] == ';')
+                {
+                	con_index++;
+                	continue;
+                }
+                else
+                {
+                    exit(1);
+                }
+            }
+        }
+        else
+        {
+            while(wait(&status) != pid);
+        }
+		delete [] argv;
 	}
-
-        // pid_t pid;
-        // int status;
-        // if ((pid = fork()) < 0)
-        // {
-        //     perror("ERROR");
-        //     if(con == '|' || con == ';')
-        //     {
-        //       // i++;
-        //         return -1;
-        //     }
-        //     else
-        //     {
-        //         exit(1);
-        //     }
-        // }
-        // else if (pid == 0)
-        // {
-        //     if (execvp(argv[0], argv) < 0)
-        //     {
-        //         perror("ERROR");
-        //         if(con == '|' || con == ';')
-        //         {
-        //           //  i++;
-        //             return -1;
-        //         }
-        //         else
-        //         {
-        //             exit(1);
-        //         }
-        //     }
-        // }
-        // else
-        // {
-        //     while(wait(&status) != pid);
-        // }
+        
        // count++;
 	//}
 }
@@ -260,20 +323,28 @@ int main()
 {
     vector<char>con;
     vector<string>cmd;
+    vector<char**> vec_cmd;
     cout << "This is our command shell." << endl;
+    while (true)
+    {
 	    cout << "$ ";
-	    char input[1024];
-	    //string input;
+	    //char input[1024];
+	    string input;
 	    char *argv[64];
-	    cin.getline(input, 1024);
-	    //getline(cin, input);
-	    parse(input, cmd, con);
-	    if (strcmp(input, "exit") == 0)
+	    //cin.getline(input, 1024);
+	    getline(cin, input);
+
+	    
+		char *temp = new char[input.length() + 1];
+		strcpy(temp, input.c_str());
+	    if (strcmp(temp, "exit") == 0)
 	    {
+	    	delete temp;
 	    	exit(0);
 	    }
-	execute(cmd,con);    
-
+	  	    parse(input, vec_cmd, con);  
+	//execute(vec_cmd,con);    
+	}
 	      //char *temp;
 	      //bool vflag;         
 	      //string s;
